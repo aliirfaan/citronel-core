@@ -1,0 +1,28 @@
+{
+    "name": "aliirfaan/citronel-core",
+    "description": "This package provides starter configuration and helper functions for laravel API projects.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "aliirfaan",
+            "email": "aliirfaan.freelance@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "aliirfaan\\CitronelCore\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=8.0.0",
+        "aliirfaan/laravel-simple-api": "^7.0.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "aliirfaan\\CitronelCore\\CitronelCoreProvider"
+            ]
+        }
+    }
+}
