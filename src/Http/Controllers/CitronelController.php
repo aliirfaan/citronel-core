@@ -3,13 +3,19 @@
 namespace aliirfaan\CitronelCore\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use aliirfaan\CitronelCore\Traits\CitronelExceptionHandlerTrait;
 use aliirfaan\LaravelSimpleApi\Services\ApiHelperService;
 use aliirfaan\LaravelSimpleApi\HypermediaRelation;
 use aliirfaan\LaravelSimpleApi\Http\Resources\ApiResponseCollection;
 use aliirfaan\CitronelCore\Services\CitronelHelperService;
+use aliirfaan\LaravelSimpleAuditLog\Services\AuditLogService;
+use aliirfaan\CitronelErrorCatalogue\Traits\ErrorCatalogue;
+use aliirfaan\CitronelErrorCatalogue\Services\CitronelErrorCatalogueService;
 
 class CitronelController extends Controller
 {
+    use ErrorCatalogue, CitronelExceptionHandlerTrait;
+    
     /**
      * apiHelperService
      *
@@ -37,6 +43,20 @@ class CitronelController extends Controller
      * @var class
      */
     public $helperService;
+    
+    /**
+     * auditService
+     *
+     * @var mixed
+     */
+    public $auditService;
+    
+    /**
+     * errorCatalogueService
+     *
+     * @var mixed
+     */
+    public $errorCatalogueService;
     
     /**
      * namespace
@@ -102,6 +122,8 @@ class CitronelController extends Controller
     public function __construct()
     {
         $this->apiHelperService = new ApiHelperService();
+        $this->auditService = new AuditLogService();
+        $this->errorCatalogueService = new CitronelErrorCatalogueService();
         $this->hypermediaRelation = new HypermediaRelation();
         $this->data = $this->apiHelperService->responseArrayFormat;
         $this->helperService = new CitronelHelperService();
