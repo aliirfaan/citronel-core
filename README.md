@@ -70,6 +70,78 @@ Base helper service.
 
 ## Usage
 
+* You can use traits in your custom helper service and then use your custom helper service in your controllers
+```php
+<?php
+
+namespace App\Services\Api\v1\Helper;
+
+use aliirfaan\CitronelCore\Services\CitronelHelperService;
+use aliirfaan\CitronelCore\Traits\CitronelCorrelationTokenTrait;
+
+// create your helper service that extends CitronelHelperService
+class HelperService extends CitronelHelperService
+{
+    // use traits
+    use CitronelCorrelationTokenTrait;
+}
+
+```
+
+* Example cache config
+```php
+<?php
+return [
+    'should_cache' => env('CITRONEL_SHOULD_CACHE', false),
+    'cache_example_process' => [
+        'should_cache' => env('CITRONEL_CACHE_EXAMPLE_PROCESS', true),
+        'cache_key' => 'citronel_example_process',
+        'cache_seconds' => env('CITRONEL_CACHE_EXAMPLE_PROCESS_SEC', 3600),
+        'cache_store' => env('CITRONEL_CACHE_STORE', env('CACHE_STORE')),
+    ],
+];
+
+```
+
+* Example controller
+```php
+<?php
+namespace App\Http\Controllers\Api\v1;
+
+use aliirfaan\CitronelCore\Http\Controllers\CitronelController;
+use aliirfaan\LaravelSimpleApi\Http\Resources\ApiResponseCollection;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Services\Api\v1\Helper\HelperService;
+
+// create your own controller and extend CitronelController
+class CustomCitronelController extends CitronelController
+{
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->helperService = new HelperService();
+    }
+
+    public function index(Request $request)
+    {
+        $this->data['result'] = null;
+        $this->data['status_code'] = Response::HTTP_OK;
+
+        $this->resultResponse = new ApiResponseCollection($this->data);
+
+        // cache response
+        $cacheConfigKey = 'cache_example_process';
+        $this->helperService->cacheResponse($cacheConfigKey, $resultResponse);
+
+        // return response
+        return $this->sendApiResponse($this->resultResponse, $this->resultResponse->collection['status_code']);
+    }
+}
+
+```
+
 ## License
 
 This software is proprietary and confidential. All rights reserved.
