@@ -110,6 +110,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use aliirfaan\CitronelCore\Http\Controllers\CitronelController;
 use aliirfaan\LaravelSimpleApi\Http\Resources\ApiResponseCollection;
+use aliirfaan\CitronelCore\Traits\CitronelApiControllerTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\Api\v1\Helper\HelperService;
@@ -117,6 +118,8 @@ use App\Services\Api\v1\Helper\HelperService;
 // create your own controller and extend CitronelController
 class CustomCitronelController extends CitronelController
 {
+    use CitronelApiControllerTrait;
+    
     public function __construct()
     {
         parent::__construct();
