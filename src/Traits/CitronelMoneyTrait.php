@@ -1,4 +1,4 @@
- <?php
+<?php
 
 namespace aliirfaan\CitronelCore\Traits;
 
@@ -35,7 +35,7 @@ trait CitronelMoneyTrait
      *
      * @return string
      */
-    public function formatCurrencyAmount($amount, $decimals = null, $currency = null, $decimalSeparator = '.', $thousandsSeparator = ',')
+    public function formatCurrencyAmountWithSymbol($amount, $decimals = null, $currency = null, $decimalSeparator = '.', $thousandsSeparator = ',')
     {
         $decimals = $decimals ?? config('citronel.decimals');
 
@@ -45,5 +45,28 @@ trait CitronelMoneyTrait
         $amount = number_format($amount, $decimals, $decimalSeparator, $thousandsSeparator);
 
         return $currencySymbol . ' ' . $amount;
+    }
+    
+    /**
+     * Method formatCurrencyAmountWithCode
+     *
+     * @param int|float $amount [explicite description]
+     * @param int $decimals [explicite description]
+     * @param string $currency [explicite description]
+     * @param string $decimalSeparator [explicite description]
+     * @param string $thousandsSeparator [explicite description]
+     *
+     * @return void
+     */
+    public function formatCurrencyAmountWithCode($amount, $decimals = null, $currency = null, $decimalSeparator = '.', $thousandsSeparator = ',')
+    {
+        $decimals = $decimals ?? config('citronel.decimals');
+
+        $currency = $currency ?? $this->getCitronelDefaultCurrency();
+        $currencyCode = strval(config('citronel.currency.supported.' . $currency . '.code'));
+
+        $amount = number_format($amount, $decimals, $decimalSeparator, $thousandsSeparator);
+
+        return $currencyCode . ' ' . $amount;
     }
 }
