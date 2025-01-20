@@ -10,6 +10,16 @@ trait CitronelMoneyTrait
     }
 
     /**
+     * Method getBaseCurrencyCode
+     *
+     * @return string
+     */
+    public function getCitronelBaseCurrencyCode()
+    {
+        return config('citronel.currency.base');
+    }
+
+    /**
      * Method formatAmount to float
      *
      * @param float $amount [explicite description]

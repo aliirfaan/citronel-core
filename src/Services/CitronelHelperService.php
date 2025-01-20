@@ -3,10 +3,11 @@
 namespace aliirfaan\CitronelCore\Services;
 
 use aliirfaan\CitronelCore\Traits\resultFormatTrait;
+use aliirfaan\CitronelCore\Traits;
 
 class CitronelHelperService
 {
-    use resultFormatTrait;
+    use resultFormatTrait, CitronelCorrelationTokenTrait;
     
     /**
      * Method makeObject

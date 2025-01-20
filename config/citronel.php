@@ -31,4 +31,9 @@ return [
     ],
     
     'reverse_proxy_url' => env('CITRONEL_REVERSE_PROXY_URL', null),
+
+    'support_email_to_address'  => env('CITRONEL_SUPPORT_EMAIL_TO_ADDRESS', null),
+
+    'back_office_api_key_header_name' => env('BACK_OFFICE_API_KEY_HEADER_NAME', 'X-Api-Key'),
+    'back_office_api_key' => env('BACK_OFFICE_API_KEY'),
 ];
