@@ -9,9 +9,9 @@ use aliirfaan\LaravelSimpleApi\Services\ApiHelperService;
 use aliirfaan\LaravelSimpleAuditLog\Services\AuditLogService;
 use aliirfaan\CitronelErrorCatalogue\Traits\ErrorCatalogue;
 use aliirfaan\LaravelSimpleAuditLog\Events\AuditLogged;
-use aliirfaan\CitronelCore\Auth\MustBeVerified;
+use aliirfaan\CitronelCore\Auth\MustBeActive;
 
-class EnsureCustomerIsVerified
+class EnsureActorIsActive
 {
     use ErrorCatalogue;
 
@@ -59,14 +59,14 @@ class EnsureCustomerIsVerified
         try {
             $namespace = 'customer';
             $mainProcessKey = config('error-catalogue.process.customer.key');
-            $subProcessKey = config('error-catalogue.process.customer.sub_process.is_verified_check.key');
+            $subProcessKey = config('error-catalogue.process.customer.sub_process.is_active_check.key');
 
             $auditData = $this->auditService->generatePreliminaryEventData($request, $correlationToken);
-            $auditData['al_event_name'] = config('error-catalogue.process.customer.sub_process.is_verified_check.name');
+            $auditData['al_event_name'] = config('error-catalogue.process.customer.sub_process.is_active_check.name');
 
             $actor = $request->get('actor', null);
 
-            if ($actor instanceof MustBeVerified && ! $actor->isActive()) {
+            if ($actor instanceof MustBeActive && ! $actor->isActive()) {
                 $code = $this->helperService->generateProcessCode($mainProcessKey, $subProcessKey, null, $this->authenticationErrorCatalogue()['code']);
 
                 $auditData['al_is_success'] = false;
