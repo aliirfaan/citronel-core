@@ -37,7 +37,7 @@ class CheckBackOfficeApiKey
     {
         $this->apiHelperService = $apiHelperService;
         $this->errorCatalogueService = $errorCatalogueService;
-        $this->mainProcess = config('citronel-error-catalogue.process.back_office');
+        $this->mainProcess = $this->errorCatalogueService->getMainProcess('back_office');
     }
 
     /**
@@ -57,7 +57,7 @@ class CheckBackOfficeApiKey
 
         // Check if the API key matches the configured key
         if (is_null($apiKey) || ($apiKey !== $configuredApiKey)) {
-            $this->subProcess = config('citronel-error-catalogue.process.back_office.sub_process.verify_key');
+            $this->subProcess = $this->errorCatalogueService->getSubProcess('back_office', 'verify_key');
 
             $code = $this->errorCatalogueService->generateCodeFromCatalogue($this->mainProcess['key'], $this->subProcess['key'], null, $this->authorizationErrorCatalogue()['code']);
 
