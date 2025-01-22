@@ -10,6 +10,7 @@ use aliirfaan\LaravelSimpleAuditLog\Services\AuditLogService;
 use aliirfaan\CitronelErrorCatalogue\Traits\ErrorCatalogue;
 use aliirfaan\LaravelSimpleAuditLog\Events\AuditLogged;
 use aliirfaan\CitronelCore\Auth\MustBeActive;
+use aliirfaan\CitronelErrorCatalogue\Services\CitronelErrorCatalogueService;
 
 class EnsureActorIsActive
 {
@@ -29,17 +30,25 @@ class EnsureActorIsActive
     protected $auditService;
 
     /**
+     * errorCatalogueService
+     *
+     * @var mixed
+     */
+    protected $errorCatalogueService;
+
+    /**
      * Create a new middleware instance.
      *
      * @param  \Illuminate\Contracts\Auth\Factory  $auth
      * @return void
      */
-    public function __construct(Auth $auth, ApiHelperService $apiHelperService, CitronelHelperService $helperService, AuditLogService $auditService)
+    public function __construct(Auth $auth, ApiHelperService $apiHelperService, CitronelHelperService $helperService, AuditLogService $auditService, CitronelErrorCatalogueService $errorCatalogueService)
     {
         $this->auth = $auth;
         $this->apiHelperService = $apiHelperService;
         $this->helperService = $helperService;
         $this->auditService = $auditService;
+        $this->errorCatalogueService = $errorCatalogueService;
     }
 
     /**
@@ -58,16 +67,16 @@ class EnsureActorIsActive
         
         try {
             $namespace = 'customer';
-            $mainProcessKey = config('error-catalogue.process.customer.key');
-            $subProcessKey = config('error-catalogue.process.customer.sub_process.is_active_check.key');
+            $mainProcess = $this->errorCatalogueService->getMainProcess('customer');
+            $subProcess = $this->errorCatalogueService->getSubProcess('customer', 'is_active_check');
 
             $auditData = $this->auditService->generatePreliminaryEventData($request, $correlationToken);
-            $auditData['al_event_name'] = config('error-catalogue.process.customer.sub_process.is_active_check.name');
+            $auditData['al_event_name'] = $subProcess['name'];
 
             $actor = $request->get('actor', null);
 
             if ($actor instanceof MustBeActive && ! $actor->isActive()) {
-                $code = $this->helperService->generateProcessCode($mainProcessKey, $subProcessKey, null, $this->authenticationErrorCatalogue()['code']);
+                $code = $this->helperService->generateProcessCode($mainProcess['key'], $subProcess['key'], null, $this->authenticationErrorCatalogue()['code']);
 
                 $auditData['al_is_success'] = false;
                 $auditData['al_code'] = $code['code'];
@@ -82,7 +91,7 @@ class EnsureActorIsActive
         } catch (\Exception $e) {
             report($e);
 
-            $code = $this->helperService->generateProcessCode($mainProcessKey, $subProcessKey, null, $this->unknownErrorCatalogue()['code']);
+            $code = $this->helperService->generateProcessCode($mainProcess['key'], $subProcess['key'], null, $this->unknownErrorCatalogue()['code']);
 
             $auditData['al_is_success'] = false;
             $auditData['al_request'] = $request->bearerToken();
