@@ -36,4 +36,13 @@ return [
 
     'back_office_api_key_header_name' => env('BACK_OFFICE_API_KEY_HEADER_NAME', 'X-Api-Key'),
     'back_office_api_key' => env('BACK_OFFICE_API_KEY'),
+
+    'features' => [
+        'app_review' => env('FEATURE_APP_REVIEW', false)
+    ],
+
+    // use account identifier like email, mobile_number to skip otp validation for reviewers
+    'app_review' => [
+        'reviewer_accounts' => []
+    ],
 ];
