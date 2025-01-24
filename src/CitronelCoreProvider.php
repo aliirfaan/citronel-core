@@ -23,8 +23,21 @@ class CitronelCoreProvider extends \Illuminate\Support\ServiceProvider
 
     public function register()
     {
+        $this->registerExceptionContext();
+
         $this->app->bind('aliirfaan\CitronelCore\Services\CitronelHelperService', function ($app) {
             return new CitronelHelperService();
+        });
+    }
+
+    protected function registerExceptionContext()
+    {
+        $exceptions = app('Illuminate\Contracts\Debug\ExceptionHandler');
+
+        $exceptions->context(function () {
+            return [
+                'server' => request()->server('SERVER_ADDR'),
+            ];
         });
     }
 }
