@@ -3,7 +3,7 @@
 namespace aliirfaan\CitronelCore\Services;
 
 use aliirfaan\CitronelCore\Traits\resultFormatTrait;
-use aliirfaan\CitronelCore\Traits;
+use aliirfaan\CitronelCore\Traits\CitronelCorrelationTokenTrait;
 
 class CitronelHelperService
 {
