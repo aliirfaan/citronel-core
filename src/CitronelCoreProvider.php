@@ -32,6 +32,7 @@ class CitronelCoreProvider extends \Illuminate\Support\ServiceProvider
 
     protected function registerExceptionContext()
     {
+        // add server to exception context
         $this->app->extend(ExceptionHandler::class, function ($handler, $app) {
             return tap($handler, function ($handler) {
                 $handler->context(function () {
