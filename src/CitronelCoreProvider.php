@@ -23,9 +23,9 @@ class CitronelCoreProvider extends \Illuminate\Support\ServiceProvider
 
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../../config/citronel.php', 'citronel');
+        $this->mergeConfigFrom(__DIR__.'/../config/citronel.php', 'citronel');
 
-        $this->mergeConfigFrom(__DIR__.'/../../config/citronel-cache', 'citronel-cache');
+        $this->mergeConfigFrom(__DIR__.'/../config/citronel-cache', 'citronel-cache');
 
         $this->registerExceptionContext();
 
