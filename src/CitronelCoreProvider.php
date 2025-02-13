@@ -32,12 +32,14 @@ class CitronelCoreProvider extends \Illuminate\Support\ServiceProvider
 
     protected function registerExceptionContext()
     {
-        $exceptions = app('Illuminate\Contracts\Debug\ExceptionHandler');
-
-        $exceptions->context(function () {
-            return [
-                'server' => request()->server('SERVER_ADDR'),
-            ];
+        $this->app->extend(ExceptionHandler::class, function ($handler, $app) {
+            return tap($handler, function ($handler) {
+                $handler->context(function () {
+                    return [
+                        'server' => request()->server('SERVER_ADDR'),
+                    ];
+                });
+            });
         });
     }
 }
