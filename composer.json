@@ -16,6 +16,7 @@
     },
     "require": {
         "php": ">=8.0.0",
+        "ext-bcmath": "*",
         "aliirfaan/laravel-simple-api": "^7.0.0",
         "aliirfaan/laravel-simple-audit-log": "^10.0.0",
         "aliirfaan/citronel-error-catalogue": "^2.0.0",

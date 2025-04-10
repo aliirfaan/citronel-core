@@ -20,19 +20,36 @@ trait CitronelMoneyTrait
     }
 
     /**
-     * Method formatAmount to float
+     * Method formatAmount to calculations
      *
      * @param float $amount [explicite description]
      * @param int $decimals [explicite description]
      *
-     * @return float
+     * @return string
      */
     public function formatAmount($amount, $decimals = null)
     {
         $decimals = $decimals ?? config('citronel.decimals');
-
-        return floatval(number_format($amount, $decimals));
+    
+        $amount = (string) $amount;
+    
+        // Shift amount by one extra decimal place
+        $multiplier = bcpow('10', $decimals + 1);
+        $shifted = bcmul($amount, $multiplier, 0);
+    
+        // Get the last digit for rounding
+        $lastDigit = (int) substr($shifted, -1);
+        $truncated = substr($shifted, 0, -1);
+    
+        // Apply rounding (half-up)
+        if ($lastDigit >= 5) {
+            $truncated = bcadd($truncated, '1');
+        }
+    
+        // Divide back down to get the correctly rounded amount, string, safe for DECIMAL colum
+        return bcdiv($truncated, bcpow('10', $decimals), $decimals);
     }
+    
     
     /**
      * Method formatCurrencyAmount

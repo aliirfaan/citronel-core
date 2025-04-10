@@ -3,6 +3,32 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 2.1.9 - 2025-04-10
+
+### Added
+
+- Nothing
+
+### Changed
+
+- Provider - stop loading translations
+- CitronelMoneyTrait:
+  - formatAmount()
+- composer.json:
+  - add bcmath dependency
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- resources/lang
+
+### Fixed
+
+- Nothing
+
 ## 2.1.2 - 2025-02-13
 
 ### Added
