@@ -45,4 +45,8 @@ return [
     'app_review' => [
         'reviewer_accounts' => []
     ],
+
+    'supported_locales' => [
+        'en'
+    ],
 ];
