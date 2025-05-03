@@ -3,6 +3,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 2.2.0 - 2025-05-03
+
+### Added
+
+- CitronelSetLocale middleware to handle languages
+
+### Changed
+
+- config/citronel.php - supported locales config
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
 ## 2.1.9 - 2025-04-10
 
 ### Added
