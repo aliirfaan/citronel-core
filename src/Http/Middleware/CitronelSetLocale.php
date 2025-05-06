@@ -4,6 +4,7 @@ namespace aliirfaan\CitronelCore\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class CitronelSetLocale
 {
