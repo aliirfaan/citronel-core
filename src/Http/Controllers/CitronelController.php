@@ -11,6 +11,7 @@ use aliirfaan\CitronelCore\Services\CitronelHelperService;
 use aliirfaan\LaravelSimpleAuditLog\Services\AuditLogService;
 use aliirfaan\CitronelErrorCatalogue\Traits\ErrorCatalogue;
 use aliirfaan\CitronelErrorCatalogue\Services\CitronelErrorCatalogueService;
+use Illuminate\Support\Facades\App;
 
 class CitronelController extends Controller
 {
@@ -113,6 +114,13 @@ class CitronelController extends Controller
      * @var mixed
      */
     public $auditData;
+    
+    /**
+     * locale
+     *
+     * @var string
+     */
+    public $locale;
 
     /**
      * Method __construct
@@ -134,5 +142,6 @@ class CitronelController extends Controller
         $this->modelApiCommand = null;
         $this->modelApiQuery = null;
         $this->auditData = null;
+        $this->locale = App::getLocale();
     }
 }
