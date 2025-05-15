@@ -16,6 +16,21 @@ class CitronelBaseModel extends Model
     protected $timezoneAwareAttributes = [];
 
     /**
+     * Automatically append *_display attributes to JSON.
+     */
+    protected $appends = [];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Dynamically append *_display attributes for timezone-aware fields
+        foreach ($this->getMergedTimezoneAwareAttributes() as $attribute) {
+            $this->appends[] = $attribute . '_display';
+        }
+    }
+
+    /**
      * List of base attributes that should always be timezone-aware.
      */
     protected function getBaseTimezoneAwareAttributes(): array
@@ -39,16 +54,19 @@ class CitronelBaseModel extends Model
     }
 
     /**
-     * Override attribute access to apply timezone conversion when needed.
+     * Dynamically return timezone-converted display values.
      */
-    public function getAttribute($key)
+    public function __get($key)
     {
-        $value = parent::getAttribute($key);
+        // Handle *_display accessors dynamically
+        if (str_ends_with($key, '_display')) {
+            $baseAttribute = substr($key, 0, -8);
 
-        if (in_array($key, $this->getMergedTimezoneAwareAttributes())) {
-            return $this->convertToDisplayTimezone($value);
+            if (in_array($baseAttribute, $this->getMergedTimezoneAwareAttributes())) {
+                return $this->convertToDisplayTimezone($this->attributes[$baseAttribute] ?? null);
+            }
         }
 
-        return $value;
+        return parent::__get($key);
     }
 }
