@@ -3,6 +3,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com) and this project adheres to [Semantic Versioning](https://semver.org).
 
+## 2.3.5 - 2025-05-15
+
+### Added
+
+- Nothing
+
+### Changed
+
+- CitronelBaseModel append attributes instead of attributes
+
+### Deprecated
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
 ## 2.3.4 - 2025-05-10
 
 ### Added
