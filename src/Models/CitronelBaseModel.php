@@ -10,40 +10,27 @@ class CitronelBaseModel extends Model
     use CitronelDateTimeTrait;
 
     /**
-     * Override this property in child classes to add custom attributes
-     * that should be timezone-aware.
+     * Define additional attributes to apply timezone conversion to.
      */
     protected $timezoneAwareAttributes = [];
 
     /**
-     * Automatically append *_display attributes to JSON.
-     */
-    protected $appends = [];
-
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-
-        // Dynamically append *_display attributes for timezone-aware fields
-        foreach ($this->getMergedTimezoneAwareAttributes() as $attribute) {
-            $this->appends[] = $attribute . '_display';
-        }
-    }
-
-    /**
-     * List of base attributes that should always be timezone-aware.
+     * Define base attributes typically used for timestamps.
      */
     protected function getBaseTimezoneAwareAttributes(): array
     {
-        return [
-            'created_at',
-            'updated_at',
-            'deleted_at',
-        ];
+        $attributes = ['created_at', 'updated_at'];
+
+        // Only include 'deleted_at' if the column exists in the model
+        if (in_array('deleted_at', $this->getDates()) || array_key_exists('deleted_at', $this->attributes)) {
+            $attributes[] = 'deleted_at';
+        }
+
+        return $attributes;
     }
 
     /**
-     * Get the full list of timezone-aware attributes by merging base and child-defined ones.
+     * Merge default + model-defined timezone-aware attributes.
      */
     protected function getMergedTimezoneAwareAttributes(): array
     {
@@ -54,16 +41,35 @@ class CitronelBaseModel extends Model
     }
 
     /**
-     * Dynamically return timezone-converted display values.
+     * Include *_display keys in JSON output without requiring accessors.
+     */
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        foreach ($this->getMergedTimezoneAwareAttributes() as $attribute) {
+            if (array_key_exists($attribute, $this->attributes)) {
+                $array[$attribute . '_display'] = $this->convertToDisplayTimezone(
+                    $this->getRawOriginal($attribute)
+                );
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Allow manual access to *_display fields dynamically.
      */
     public function __get($key)
     {
-        // Handle *_display accessors dynamically
         if (str_ends_with($key, '_display')) {
             $baseAttribute = substr($key, 0, -8);
 
             if (in_array($baseAttribute, $this->getMergedTimezoneAwareAttributes())) {
-                return $this->convertToDisplayTimezone($this->attributes[$baseAttribute] ?? null);
+                return $this->convertToDisplayTimezone(
+                    $this->getRawOriginal($baseAttribute)
+                );
             }
         }
 
