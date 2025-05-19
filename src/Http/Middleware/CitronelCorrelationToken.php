@@ -21,9 +21,10 @@ class CitronelCorrelationToken
     {
         $correlationToken = $this->getCorrelationTokenFromHeader($request);
 
+        $correlationTokenHeaderKey = config('citronel.correlation_token_header_key');
+        
         if (is_null($correlationToken)) {
             $correlationToken = $this->generateCorrelationToken();
-            $correlationTokenHeaderKey = config('citronel.correlation_token_header_key');
             $request->headers->set($correlationTokenHeaderKey, $correlationToken);
         }
 
