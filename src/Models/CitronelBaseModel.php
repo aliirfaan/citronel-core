@@ -48,6 +48,10 @@ class CitronelBaseModel extends Model
         $array = parent::toArray();
     
         foreach ($this->getMergedTimezoneAwareAttributes() as $attribute) {
+            if (in_array($attribute, $this->hidden)) {
+                continue;
+            }
+
             $value = $this->getRawOriginal($attribute) ?? $this->getAttribute($attribute);
     
             $array[$attribute . '_display'] = $value !== null
