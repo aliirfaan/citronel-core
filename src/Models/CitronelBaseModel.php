@@ -46,19 +46,20 @@ class CitronelBaseModel extends Model
     public function toArray()
     {
         $array = parent::toArray();
-    
+
         foreach ($this->getMergedTimezoneAwareAttributes() as $attribute) {
-            if (in_array($attribute, $this->hidden)) {
+            // Only add *_display keys if the attribute is present in the model's attributes
+            if (!array_key_exists($attribute, $this->attributes)) {
                 continue;
             }
 
             $value = $this->getRawOriginal($attribute) ?? $this->getAttribute($attribute);
-    
+
             $array[$attribute . '_display'] = $value !== null
                 ? $this->convertToDisplayTimezone($value)
                 : null;
         }
-    
+
         return $array;
     }
     
